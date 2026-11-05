@@ -1,6 +1,7 @@
 package com.hirepath.hirepath_api.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
@@ -9,14 +10,17 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String firstName;
     private String lastName;
+
+    @Column(unique = true, nullable = false)
     private String email;
     private String passwordHash;
 
     public User() {}
 
-    public User(Long id, String firstName, String lastName, String email, Integer age, String passwordHash) {
+    public User(Long id, String firstName, String lastName, String email, String passwordHash) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -24,7 +28,7 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public long getId() {return id;}
+    public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
 
     public String getFirstName() {return firstName;}
