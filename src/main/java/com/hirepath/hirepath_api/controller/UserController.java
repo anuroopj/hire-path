@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,51 +23,23 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> getUsers() {
-        List<User> users = userService.getAllUsers();
-        List<UserResponse> userResponses = new ArrayList<>();
-
-        for(int i = 0; i < users.size(); i++) {
-            UserResponse response = new UserResponse(
-                    users.get(i).getId(),
-                    users.get(i).getFirstName(),
-                    users.get(i).getLastName(),
-                    users.get(i).getEmail()
-            );
-
-            userResponses.add(response);
-        }
-
-        return ResponseEntity.ok(userResponses);
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-        User user = userService.findUserById(id);
-        UserResponse response = new UserResponse();
-
-        response.setId(user.getId());
-        response.setFirstName(user.getFirstName());
-        response.setLastName(user.getLastName());
-        response.setEmail(user.getEmail());
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(response);
+        return ResponseEntity.ok(userService.findUserById(id));
     }
 
     @PostMapping("/signup")
     public ResponseEntity createUser(@Valid @RequestBody UserRequest userRequest) {
-        User user = new User();
-        user.setFirstName(userRequest.getFirstName());
-        user.setLastName(userRequest.getLastName());
-        user.setEmail(userRequest.getEmail());
-        user.setPasswordHash(userRequest.getPassword());
-        userService.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userService.addUser(userRequest));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity removeUser(@PathVariable Long id) {
-        User user = userService.findUserById(id);
+        User user = userService.getUserEntityById(id);
         userService.removeUser(user);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

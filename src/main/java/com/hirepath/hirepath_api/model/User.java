@@ -1,7 +1,6 @@
 package com.hirepath.hirepath_api.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
@@ -20,8 +19,7 @@ public class User {
 
     public User() {}
 
-    public User(Long id, String firstName, String lastName, String email, String passwordHash) {
-        this.id = id;
+    public User(String firstName, String lastName, String email, String passwordHash) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
